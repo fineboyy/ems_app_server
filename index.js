@@ -2,12 +2,17 @@ import 'dotenv/config'
 import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
-
 const app = express()
 
 app.use(express.json({limit: "30mb" ,extended: true}))
 app.use(express.urlencoded({limit: "30mb" ,extended: true}))
 app.use(cors())
+
+import indexRoutes from './routes/index.js'
+import employeeRoutes from './routes/employees.js'
+
+app.use('/', indexRoutes)
+app.use('/employees', employeeRoutes)
 
 
 const DATABASE_URI = process.env.MONGODB_URI
