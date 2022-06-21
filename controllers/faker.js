@@ -28,26 +28,27 @@ export const createFakeEmployees = async (req, res) => {
     console.log("Creating......")
     const departments = await Department.find()
     const employeesArr = []
-    departments.map((department) => {
-        Array.from({length: 12}).forEach(() => {
-            const newEmployee = new Employee(createRandomEmployee())
-            newEmployee.department = department._id
-            newEmployee.full_name = newEmployee.first_name + " " + newEmployee.last_name
-            employeesArr.push(newEmployee)
-            department.members.push(newEmployee._id)
-        })
+    const updatedDepartmentsArr = []
+    Array.from({length: 170}).forEach(async ()=> {
+        const randomDepartment = departments[Math.floor(Math.random() * 13)]
+        const newEmployee = new Employee(createRandomEmployee())
+        newEmployee.department = randomDepartment._id
+        newEmployee.full_name = newEmployee.first_name + " " + newEmployee.last_name
+        employeesArr.push(newEmployee)
+        randomDepartment.members.push(newEmployee._id)
 
         try {
-            department.save()
+           const rand = await randomDepartment.save()
+            console.log("Created")
         } catch (error) {
-            res.json(error)
+            console.log(error)
         }
     })
 
     try {
         const allEmployees = await Employee.insertMany(employeesArr)
-        res.json(allEmployees)
+        return res.json(allEmployees)
     } catch (error) {
-        res.json(error)   
+       return  res.json(error)   
     }
 }

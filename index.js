@@ -10,9 +10,11 @@ app.use(cors())
 
 import indexRoutes from './routes/index.js'
 import employeeRoutes from './routes/employees.js'
+import departmentRoutes from './routes/departments.js'
 
 app.use('/', indexRoutes)
 app.use('/employees', employeeRoutes)
+app.use('/departments', departmentRoutes)
 
 
 const DATABASE_URI = process.env.MONGODB_URI
