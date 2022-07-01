@@ -5,20 +5,31 @@ const employeeSchema = mongoose.Schema({
     first_name: String,
     last_name: String,
     full_name: String,
-    job_title: String,
     address: String,
     photo: String,
     date_of_birth: Date,
-    department: {
-        type: SchemaTypes.ObjectId,
-        ref: 'Department'
-    },
     phone_number: String,
     email:  String,
     gender: String,
     nationality: String,
     marital_status:  String,
-    date_of_hire: Date
+    emergency_contact: String,
+    //EMPLOYMENT DETAILS
+    date_of_hire: Date,
+    job_title: String,
+    department: {
+        type: SchemaTypes.ObjectId,
+        ref: 'Department'
+    },
+
+    //EDUCATION
+    school_name: String,
+    school_location: String,
+    school_country: String,
+    degree: String,
+    school_year_started: String,
+    school_year_completed: String,
+
 })
 
 
