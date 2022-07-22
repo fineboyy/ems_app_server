@@ -3,6 +3,8 @@ const { SchemaTypes } = mongoose;
 
 const departmentSchema = mongoose.Schema({
     name: String,
+    status:  String,
+    hod: String,
     members: {
         type: SchemaTypes.Array,
         ref: 'Employee'

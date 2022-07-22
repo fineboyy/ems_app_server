@@ -14,9 +14,16 @@ const employeeSchema = mongoose.Schema({
     nationality: String,
     marital_status:  String,
     emergency_contact: String,
+    
     //EMPLOYMENT DETAILS
     date_of_hire: Date,
     job_title: String,
+
+    leave_applications: {
+        type: SchemaTypes.Array,
+        ref: 'Leave'
+    },
+
     department: {
         type: SchemaTypes.ObjectId,
         ref: 'Department'

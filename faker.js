@@ -83,6 +83,20 @@ const jobTitlesArray = [
   "Chief Information Officer (CIO)",
 ];
 
+const leaveTypes = ['Personal Work', 'Casual Leave', 'Sick Leave', 'Maternity Leave']
+const leaveStatus = ['pending', 'approved', 'rejected']
+
+
+const createRandomLeave = () => {
+  const leave = {
+    leave_type: faker.helpers.arrayElement(leaveTypes),
+    leave_status: faker.helpers.arrayElement(leaveStatus),
+    leave_from: faker.date.soon(),
+    leave_to: faker.date.future(),
+  }
+  return leave;
+}
+
 const genderArray = ["male", "female"];
 const maritalStatusArray = ["single", "married"];
 function createRandomEmployee() {
@@ -110,4 +124,4 @@ function createDepartment() {
   return department;
 }
 
-export { createDepartment, createRandomEmployee };
+export { createDepartment, createRandomEmployee, createRandomLeave };
