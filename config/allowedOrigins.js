@@ -1,1 +1,1 @@
-export const allowedOrigins = ['http://localhost:3000', "https://divco-ems-application.netlify.app"]
+export const allowedOrigins = ["https://divco-ems-application.netlify.app"]
