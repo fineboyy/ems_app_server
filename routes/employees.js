@@ -13,9 +13,12 @@ import { createLeaveApplication } from "../controllers/leaveController.js"
 
 router.get("/", getAllEmployees);
 router.post("/", createEmployee);
-router.get("/:id", getOneEmployee);
-router.patch("/:id", updateEmployee);
-router.delete("/:id", deleteEmployee);
+
+router.route("/:id")
+  .get(getOneEmployee)
+  .patch(updateEmployee)
+  .delete(deleteEmployee)
+  
 router.post("/:id/apply_leave", createLeaveApplication);
 
 export default router;

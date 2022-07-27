@@ -11,10 +11,13 @@
   "author": "Michael Amponsah",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^7.3.0",
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "mongoose": "^6.4.0",
-    "@faker-js/faker": "^7.3.0"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.0"
   }
 }

@@ -5,7 +5,8 @@ import Department from "../models/department.js";
 export const getAllEmployees = async (req, res) => {
   try {
     const employees = await Employee.find().populate("department", "name");
-    return res.status(200).json(employees);
+    console.log("Got Employees")
+    return res.status(200).json(employees) && console.log("And Sent them to Client");
   } catch (error) {
     console.log(error);
     return res.status(503).json({ message: "Could Not Get All Employees" });
