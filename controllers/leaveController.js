@@ -5,7 +5,7 @@ import Employee from "../models/employee.js";
 export const getAllLeaveApplications = async (req, res) => {
   try {
     const leaves = await Leave.find();
-    console.log("Leaves", leaves)
+    if(!leaves.length) return res.sendStatus(404)
     return res.status(200).json(leaves);
   } catch (error) {
     console.log(error);

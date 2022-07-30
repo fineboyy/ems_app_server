@@ -26,7 +26,7 @@ export const handleLogin = async ({body}, res ) => {
         foundUser.refreshToken = refreshToken
         const savedUser = await foundUser.save()
         res.cookie('jwt', refreshToken, {httpOnly:  true, maxAge: 3 * 24 * 60 * 60 * 1000})
-        return res.json({accessToken})
+        return res.json({accessToken, username: foundUser.username})
     } else {
         return res.sendStatus(401)
     }

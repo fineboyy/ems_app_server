@@ -28,6 +28,10 @@ const employeeSchema = mongoose.Schema({
         type: SchemaTypes.ObjectId,
         ref: 'Department'
     },
+    hod_of: {
+        type: SchemaTypes.ObjectId,
+        ref: 'Department'
+    },
 
     //EDUCATION
     school_name: String,

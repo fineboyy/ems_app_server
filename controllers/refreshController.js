@@ -23,7 +23,7 @@ export const handleTokenRefresh = async (req, res) => {
         { expiresIn: "20m" }
       );
 
-      res.json({ accessToken });
+      res.json({ accessToken, username: foundUser.username });
     }
   );
 };
