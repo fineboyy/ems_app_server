@@ -26,3 +26,5 @@ export const getOneDepartment = async ({params}, res) => {
         return res.json(error)
     }
 }
+
+// export const deleteDepartment = 

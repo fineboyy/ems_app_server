@@ -62,4 +62,29 @@ export const getOneEmployee = async ({ params }, res) => {
 };
 
 export const updateEmployee = async (req, res) => {};
-export const deleteEmployee = async (req, res) => {};
+export const deleteEmployee = async ({body, params}, res) => {
+  const employee_id = params.id
+  const department_id = body.department_id
+  console.log(body, employee_id)
+
+  if(!employee_id || !department_id ) return res.sendStatus(400)
+  if (!mongoose.Types.ObjectId.isValid(employee_id)) return res.sendStatus(404);
+  if (!mongoose.Types.ObjectId.isValid(department_id)) return res.sendStatus(404);
+
+  try {
+
+    const foundEmployee = await Employee.findById(employee_id)
+    if(!foundEmployee) return res.sendStatus(404)  
+    const foundDepartment = await Department.findById(department_id)
+    if(!foundDepartment) return res.sendStatus(404)
+
+    const newMembers = foundDepartment.members.filter((member) => member._id !== employee_id)
+    await Department.updateOne({_id: department_id}, {members: newMembers})
+    await Employee.deleteOne({_id: employee_id})
+    console.log("Deleted")   
+    return res.sendStatus(204)
+  } catch (error) {
+    console.log("====>", "error")
+    return res.json(error) 
+  }
+};
