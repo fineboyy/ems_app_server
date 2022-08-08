@@ -2,11 +2,12 @@ import mongoose from "mongoose";
 import Employee from "../models/employee.js";
 import Department from "../models/department.js";
 
+import moment from "moment";
+
 export const getAllEmployees = async (req, res) => {
   try {
     const employees = await Employee.find().populate("department", "name");
-    console.log("Got Employees")
-    return res.status(200).json(employees) && console.log("And Sent them to Client");
+    return res.status(200).json(employees);
   } catch (error) {
     console.log(error);
     return res.status(503).json({ message: "Could Not Get All Employees" });
@@ -34,7 +35,6 @@ export const createEmployee = async ({ body }, res) => {
   employeeDepartment.members.push(newEmployee._id);
   try {
     await employeeDepartment.save();
-    console.log("Successfully Updated Department With New Employee");
   } catch (error) {
     console.log(error);
     return res.status(401).json({ error });
@@ -42,49 +42,67 @@ export const createEmployee = async ({ body }, res) => {
 
   try {
     await newEmployee.save();
-    const userWithDepartment = await newEmployee.populate("department", "name")
+    const userWithDepartment = await newEmployee.populate("department", "name");
     return res.status(201).json(userWithDepartment);
   } catch (error) {
     console.log(error);
     return res.status(401).json({ error });
   }
 };
+
 export const getOneEmployee = async ({ params }, res) => {
   const id = params.id;
   if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).json({ message: "The User ID is invalid" });
+    return res.status(404).json({ message: "The Employee ID is invalid" });
+
   try {
     const employee = await Employee.findById(id).populate("department", "name");
-    return res.status(200).json(employee);
+    if(!employee) return res.sendStatus(404)
+
+    //IF employee isCurrentlyOnLeaveVariable is set to true but the end date of the
+    //last recorded leave application is past due, update the isCurrentlyOnLeaveVariable to false
+    const lastAppliedLeave =
+      employee.leave_applications[employee.leave_applications.length - 1];
+
+    if (
+      moment().isAfter(lastAppliedLeave?.leave_to) &&
+      employee.is_currently_on_leave
+    ) {
+      employee.is_currently_on_leave = false;
+      res.status(200).json(employee);
+      const savedEmployee = await employee.save();
+    } else {
+      return res.status(200).json(employee);
+    }
   } catch (error) {
-    return res.json(error);
+    console.log(error);
+    return res.sendStatus(500);
   }
 };
 
 export const updateEmployee = async (req, res) => {};
-export const deleteEmployee = async ({body, params}, res) => {
-  const employee_id = params.id
-  const department_id = body.department_id
-  console.log(body, employee_id)
+export const deleteEmployee = async ({ body, params }, res) => {
+  const employee_id = params.id;
+  const department_id = body.department_id;
 
-  if(!employee_id || !department_id ) return res.sendStatus(400)
+  if (!employee_id || !department_id) return res.sendStatus(400);
   if (!mongoose.Types.ObjectId.isValid(employee_id)) return res.sendStatus(404);
-  if (!mongoose.Types.ObjectId.isValid(department_id)) return res.sendStatus(404);
+  if (!mongoose.Types.ObjectId.isValid(department_id))
+    return res.sendStatus(404);
 
   try {
+    const foundEmployee = await Employee.findById(employee_id);
+    if (!foundEmployee) return res.sendStatus(404);
+    const foundDepartment = await Department.findById(department_id);
+    if (!foundDepartment) return res.sendStatus(404);
 
-    const foundEmployee = await Employee.findById(employee_id)
-    if(!foundEmployee) return res.sendStatus(404)  
-    const foundDepartment = await Department.findById(department_id)
-    if(!foundDepartment) return res.sendStatus(404)
-
-    const newMembers = foundDepartment.members.filter((member) => member._id !== employee_id)
-    await Department.updateOne({_id: department_id}, {members: newMembers})
-    await Employee.deleteOne({_id: employee_id})
-    console.log("Deleted")   
-    return res.sendStatus(204)
+    const newMembers = foundDepartment.members.filter(
+      (member) => member._id !== employee_id
+    );
+    await Department.updateOne({ _id: department_id }, { members: newMembers });
+    await Employee.deleteOne({ _id: employee_id });
+    return res.sendStatus(204);
   } catch (error) {
-    console.log("====>", "error")
-    return res.json(error) 
+    return res.json(error);
   }
 };

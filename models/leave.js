@@ -7,7 +7,7 @@ const leaveSchema = mongoose.Schema({
         type: SchemaTypes.ObjectId,
         ref: 'Employee'
     },
-    leave_extra_info: String,
+    reason: String,
     employee_name: String,
     employee_photo: String,
     employee_department_name: String,
@@ -19,6 +19,10 @@ const leaveSchema = mongoose.Schema({
         default: 'pending'
     },
     applied_date: {
+        type: Date,
+        default: Date.now()
+    },
+    last_modified: {
         type: Date,
         default: Date.now()
     }

@@ -9,30 +9,33 @@ const employeeSchema = mongoose.Schema({
     photo: String,
     date_of_birth: Date,
     phone_number: String,
-    email:  String,
+    email: String,
     gender: String,
     nationality: String,
-    marital_status:  String,
+    marital_status: String,
     emergency_contact: String,
-    
+  
     //EMPLOYMENT DETAILS
     date_of_hire: Date,
     job_title: String,
-
-    leave_applications: {
-        type: SchemaTypes.Array,
-        ref: 'Leave'
+    is_currently_on_leave: {
+      type: Boolean,
+      default: false,
     },
-
+    leave_applications: {
+      type: SchemaTypes.Array,
+      ref: "Leave",
+    },
+  
     department: {
-        type: SchemaTypes.ObjectId,
-        ref: 'Department'
+      type: SchemaTypes.ObjectId,
+      ref: "Department",
     },
     hod_of: {
-        type: SchemaTypes.ObjectId,
-        ref: 'Department'
+      type: SchemaTypes.ObjectId,
+      ref: "Department",
     },
-
+  
     //EDUCATION
     school_name: String,
     school_location: String,
@@ -40,8 +43,7 @@ const employeeSchema = mongoose.Schema({
     degree: String,
     school_year_started: String,
     school_year_completed: String,
-
-})
+  });
 
 
 const Employee = mongoose.model('Employee', employeeSchema)
